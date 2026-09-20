@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Zyde Example</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 40px 20px;
+        font-family: system-ui, sans-serif;
+        line-height: 1.5;
+        color: #222;
+        background: #f7f7f7;
+      }
+
+      h1 {
+        margin-bottom: 32px;
+      }
+
+      section {
+        margin-bottom: 20px;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        background: #fff;
+      }
+
+      h2 {
+        margin-top: 0;
+        font-size: 1.1rem;
+      }
+
+      button,
+      input {
+        margin: 4px;
+        padding: 8px 10px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font: inherit;
+      }
+
+      button {
+        cursor: pointer;
+        background: #222;
+        color: #fff;
+      }
+
+      button:hover {
+        background: #444;
+      }
+
+      input {
+        width: calc(50% - 12px);
+      }
+
+      a {
+        display: inline-block;
+        margin: 4px;
+        color: #555;
+      }
+
+      #result {
+        display: block;
+        margin-top: 8px;
+        padding: 12px;
+        min-height: 42px;
+        border-radius: 6px;
+        background: #eee;
+        white-space: pre-wrap;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Zyde Example</h1>
+
+    <section>
+      <h2>Window</h2>
+
+      <button onclick="toggleFullscreen()">Toggle fullscreen</button>
+      <button onclick="minimize()">Minimize</button>
+      <button onclick="checkMinimized()">Is minimized?</button>
+      <button onclick="hideAndShow()">Hide window for 3 seconds</button>
+      <a href="/nonexistingpage">Navigate to non-existing link</a>
+    </section>
+
+    <section>
+      <h2>Commands</h2>
+
+      <button onclick="helloFromZig()">Hello from Zig</button>
+      <button onclick="callZigWithArgs()">Sum Numbers</button>
+      <button onclick="getUsers()">Get User List</button>
+    </section>
+
+    <section>
+      <h2>Login</h2>
+
+      <input id="username" type="text" value="erdem" placeholder="Username" />
+      <input id="password" type="password" value="123" placeholder="Password" />
+      <button onclick="login()">Login</button>
+    </section>
+
+    <strong>Result</strong>
+    <pre id="result"></pre>
+
+    <script>
+      async function toggleFullscreen() {
+        await window.zyde.invoke("window.toggleFullscreen");
+      }
+
+      async function minimize() {
+        await window.zyde.invoke("window.minimize");
+      }
+
+      async function checkMinimized() {
+        const minimized = await window.zyde.invoke("window.isMinimized");
+
+        document.getElementById("result").textContent = "Is minimized = " + minimized;
+      }
+
+      async function helloFromZig() {
+        await window.zyde.invoke("window.eval");
+      }
+
+      function hideAndShow() {
+        window.zyde.invoke("window.hide").then(() => {
+          setTimeout(() => {
+            window.zyde.invoke("window.show");
+          }, 3000);
+        });
+      }
+
+      async function getUsers() {
+        const result = await window.zyde.invoke("getUsers");
+
+        document.getElementById("result").textContent = JSON.stringify(result, null, 2);
+      }
+
+      async function callZigWithArgs() {
+        const result = await window.zyde.invoke("add", 10, 20);
+
+        document.getElementById("result").textContent = result;
+      }
+
+      async function login() {
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+
+        const result = await window.zyde.invoke("login", {
+          username,
+          password,
+        });
+
+        document.getElementById("result").textContent = result ? "OK" : "FAIL";
+      }
+    </script>
+  </body>
+</html>

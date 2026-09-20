@@ -1,0 +1,6 @@
+// Favicon https://www.favicon.cc/?action=icon&file_id=1016002
+// Webview icon id
+#define IDI_APPLICATION 32512
+
+1 ICON "public/favicon.ico"
+IDI_APPLICATION ICON "public/favicon.ico"

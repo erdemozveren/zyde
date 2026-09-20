@@ -1,0 +1,11 @@
+# Zig build artifacts and caches
+.zig-cache/
+zig-out/
+
+# Fetched package dependencies
+zig-pkg/
+
+# OS and editor files
+.DS_Store
+*.swp
+*.swo

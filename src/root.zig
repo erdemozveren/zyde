@@ -9,7 +9,7 @@ pub const Context = Commands.Context;
 const httpz = @import("httpz");
 pub const Webview = @import("webview").Webview;
 pub const PublicFolder = @import("embedded_public");
-const js_bridge_code = @embedFile("init.js");
+const js_init_bridge_code = @embedFile("init.js");
 pub const DefaultCommands = @import("default-commands.zig");
 
 const InvokeArgs = std.meta.Tuple(&.{
@@ -313,7 +313,7 @@ pub fn App(comptime commands: anytype) type {
                 wv_handler,
             );
 
-            try webview.addInitScript(js_bridge_code);
+            try webview.addInitScript(js_init_bridge_code);
             try webview.navigate(self.serve_url);
 
             return win;

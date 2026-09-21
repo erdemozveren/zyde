@@ -61,7 +61,7 @@ const App = Zyde.App(.{
     .@"window.isMinimized" = isMinimized,
 });
 
-fn add(a: i32, b: i32) !i32 {
+fn add(a: i32, b: i32) i32 {
     return a + b;
 }
 
@@ -74,6 +74,9 @@ fn isMinimized(ctx: *Zyde.Context) !bool {
 }
 
 pub fn main(init: std.process.Init) !void {
+    // App.init(io: Io, gpa_allocator: std.mem.Allocator, debug: bool, port: ?u16)
+    // Debug mode enables dev tools
+    // If the port is null, it is automatically assigned by the system
     const app = try App.init(init.io, init.gpa, true, null);
     defer app.deinit();
 

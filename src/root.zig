@@ -161,11 +161,11 @@ pub fn App(comptime commands: anytype) type {
             app: *Self,
             pub fn handleInvokeRequest(self: *SelfWebviewHandler, id: [:0]const u8, req: [:0]const u8) void {
                 // Retain up to 64 KB for reuse by the next request.
-                _ = self.app.arena.reset(
+                _ = self.app.requset_arena.reset(
                     .{ .retain_with_limit = 64 * 1024 },
                 );
 
-                const allocator = self.app.arena.allocator();
+                const allocator = self.app.requset_arena.allocator();
                 const parsed = serde.json.fromSlice(
                     InvokeArgs,
                     allocator,
@@ -219,7 +219,7 @@ pub fn App(comptime commands: anytype) type {
         server_thread: std.Thread,
 
         gpa: std.mem.Allocator,
-        arena: std.heap.ArenaAllocator,
+        requset_arena: std.heap.ArenaAllocator,
 
         pub fn init(
             io: Io,
@@ -265,7 +265,7 @@ pub fn App(comptime commands: anytype) type {
                 .serve_url = serve_url,
                 .server_thread = undefined,
                 .gpa = gpa_allocator,
-                .arena = arena,
+                .requset_arena = arena,
             };
             self.server_thread = try self.server.listenInNewThread();
             return self;
@@ -325,7 +325,7 @@ pub fn App(comptime commands: anytype) type {
             self.server_thread.join();
 
             self.gpa.free(self.serve_url);
-            self.arena.deinit();
+            self.requset_arena.deinit();
 
             self.gpa.destroy(self);
         }
